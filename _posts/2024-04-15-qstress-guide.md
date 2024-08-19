@@ -4,8 +4,6 @@ title: Qstress Guide
 date: 2024-04-15 15:00:00 -0700
 
 categories: [Programming, Guide]
-
-tags: []
 ---
 
 [qstress](https://github.com/lwm7708/qstress) is a simple tool for stress testing in competitive
@@ -41,13 +39,14 @@ The task is just outputting `a + b`.
 We will purposely provide an incorrect solution in `main.cpp`{: .filepath}.
 
 ```cpp
+#include <cstdint>
 #include <ios>
 #include <iostream>
 
-auto solve() {
+void solve() {
 
-    auto a = 0;
-    auto b = 0;
+    std::int32_t a;
+    std::int32_t b;
 
     std::cin >> a >> b;
 
@@ -60,7 +59,7 @@ auto solve() {
 
 }
 
-auto main() -> int {
+int main() {
 
     std::cin.tie(nullptr);
 
@@ -80,13 +79,14 @@ We add a slower but correct solution in `slow.cpp`{: .filepath}.
 {: .prompt-warning}
 
 ```cpp
+#include <cstdint>
 #include <ios>
 #include <iostream>
 
-auto solve() {
+void solve() {
 
-    auto a = 0;
-    auto b = 0;
+    std::int32_t a;
+    std::int32_t b;
 
     std::cin >> a >> b;
 
@@ -104,7 +104,7 @@ auto solve() {
 
 }
 
-auto main() -> int {
+int main() {
 
     std::cin.tie(nullptr);
 
@@ -125,37 +125,38 @@ We also provide a generator to generate random test cases.
 
 ```cpp
 #include <chrono>
+#include <cstdint>
 #include <ios>
 #include <iostream>
 #include <random>
 
-namespace Random {
+namespace generate {
 
-    auto rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
+    std::mt19937_64 rng(std::chrono::steady_clock::now().time_since_epoch().count());
+
+    template <typename T>
+    T next_int(T a, T b) {
+
+        return std::uniform_int_distribution<T>(a, b - 1)(rng);
+
+    }
 
 }
 
-template <typename T>
-auto nextInt(T a, T b) {
+void gen() {
 
-    return std::uniform_int_distribution<T>(a, b - 1)(Random::rng);
-
-}
-
-auto generate() {
-
-    const auto a = nextInt(-10, 11);
-    const auto b = nextInt(-10, 11);
+    const std::int32_t a = generate::next_int(-10, 11);
+    const std::int32_t b = generate::next_int(-10, 11);
 
     std::cout << a << ' ' << b << '\n';
 
 }
 
-auto main() -> int {
+int main() {
 
     std::ios_base::sync_with_stdio(false);
 
-    generate();
+    gen();
 
     return 0;
 
@@ -213,19 +214,20 @@ It is guaranteed that there is a valid construction.
 We will purposely provide an incorrect solution in `main.cpp`{: .filepath}.
 
 ```cpp
+#include <cstdint>
 #include <ios>
 #include <iostream>
 
-auto solve() {
+void solve() {
 
-    auto a = 0;
-    auto b = 0;
-    auto n = 0;
-    auto s = 0;
+    std::int32_t a;
+    std::int32_t b;
+    std::int32_t n;
+    std::int32_t s;
 
     std::cin >> n >> a >> b >> s;
 
-    for (auto i = 0; i < n - 1; ++i) {
+    for (std::int32_t i = 0; i < n - 1; ++i) {
         std::cout << a << ' ';
     }
 
@@ -233,7 +235,7 @@ auto solve() {
 
 }
 
-auto main() -> int {
+int main() {
 
     std::cin.tie(nullptr);
 
@@ -256,36 +258,39 @@ The checker then outputs `1` if the output is valid or `0` if the output is inva
 {: .prompt-warning}
 
 ```cpp
+#include <cstdint>
 #include <fstream>
 #include <ios>
 #include <iostream>
 
-auto fin = std::ifstream("input.txt");
+std::ifstream fin("input.txt");
 
-auto check() {
+void check() {
 
-    auto a = 0;
-    auto b = 0;
-    auto n = 0;
-    auto s = 0;
+    std::int32_t a;
+    std::int32_t b;
+    std::int32_t n;
+    std::int32_t s;
 
     fin >> n >> a >> b >> s;
 
-    auto is_val = true;
-    auto sum = 0;
+    std::int32_t sum = 0;
+    bool valid = true;
 
-    for (auto i = 0; i < n; ++i) {
-        auto val = 0;
+    for (std::int32_t i = 0; i < n; ++i) {
+        std::int32_t val;
         std::cin >> val;
-        is_val &= val >= a && val <= b;
+        valid &= val >= a && val <= b;
         sum += val;
     }
 
-    std::cout << (is_val && sum == s) << '\n';
+    valid &= sum == s;
+
+    std::cout << valid << '\n';
 
 }
 
-auto main() -> int {
+int main() {
 
     std::cin.tie(nullptr);
 
@@ -303,45 +308,46 @@ We also provide a generator to generate random test cases.
 
 ```cpp
 #include <chrono>
+#include <cstdint>
 #include <ios>
 #include <iostream>
 #include <random>
 
-namespace Random {
+namespace generate {
 
-    auto rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
+    std::mt19937_64 rng(std::chrono::steady_clock::now().time_since_epoch().count());
+
+    template <typename T>
+    T next_int(T a, T b) {
+
+        return std::uniform_int_distribution<T>(a, b - 1)(rng);
+
+    }
 
 }
 
-template <typename T>
-auto nextInt(T a, T b) {
+void gen() {
 
-    return std::uniform_int_distribution<T>(a, b - 1)(Random::rng);
-
-}
-
-auto generate() {
-
-    const auto n = nextInt(2, 7);
-    const auto a = nextInt(1, 11);
+    const std::int32_t a = generate::next_int(1, 11);
+    const std::int32_t n = generate::next_int(2, 7);
 
     std::cout << n << ' ' << a << ' ';
 
-    const auto b = nextInt(a, 11);
+    const std::int32_t b = generate::next_int(a, 11);
 
     std::cout << b << ' ';
 
-    const auto s = nextInt(a * n, b * n + 1);
+    const std::int32_t s = generate::next_int(a * n, b * n + 1);
 
     std::cout << s << '\n';
 
 }
 
-auto main() -> int {
+int main() {
 
     std::ios_base::sync_with_stdio(false);
 
-    generate();
+    gen();
 
     return 0;
 
