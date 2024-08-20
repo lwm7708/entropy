@@ -386,7 +386,6 @@ $ qstress view --checker
 | `find`       | No       | `integer` | Max number of failing tests to find |
 | `folder`     | No       | `string`  | Folder to save failing tests        |
 
-
 ## Configuration
 
 The configuration is defined in `~/.qstress/config.json`{: .filepath}.
