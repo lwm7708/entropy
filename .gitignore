@@ -1,0 +1,17 @@
+vendor
+.bundle
+
+Gemfile.lock
+
+_site
+.jekyll-cache
+
+*.gem
+
+node_modules
+
+package-lock.json
+
+assets/js/dist
+
+.DS_Store
